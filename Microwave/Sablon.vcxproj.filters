@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Shader Files">
+      <UniqueIdentifier>{a8b5ff39-85c7-4196-b461-819f918ebb58}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="basic.frag">
+      <Filter>Source Files\Shader Files</Filter>
+    </None>
+    <None Include="basic.vert">
+      <Filter>Source Files\Shader Files</Filter>
+    </None>
+    <None Include="texture.frag" />
+    <None Include="texture.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\burger.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\0.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\colon.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\0_numpad.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\1_numpad.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\2_numpad.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\3_numpad.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\4.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\4_numpad.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\5.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\5_numpad.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\6.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\6_numpad.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\7.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\7_numpad.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\8.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\8_numpad.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\9.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\9_numpad.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\next.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\off.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\on.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\diode.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\diode-border.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\diode-blue.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\diode-red.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\microwave-opened.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\light.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\light2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\light3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\name.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
