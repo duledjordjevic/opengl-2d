@@ -173,11 +173,17 @@
     <Image Include="res\9.png" />
     <Image Include="res\9_numpad.png" />
     <Image Include="res\burger.png" />
+    <Image Include="res\cloud-smoke-black.png" />
+    <Image Include="res\cloud-smoke-gray.png" />
+    <Image Include="res\cloud-smoke-transparent.png" />
+    <Image Include="res\cloud-smoke.png" />
     <Image Include="res\colon.png" />
     <Image Include="res\diode-blue.png" />
     <Image Include="res\diode-border.png" />
     <Image Include="res\diode-red.png" />
     <Image Include="res\diode.png" />
+    <Image Include="res\e.png" />
+    <Image Include="res\fog.png" />
     <Image Include="res\light.png" />
     <Image Include="res\light2.png" />
     <Image Include="res\light3.png" />
@@ -186,6 +192,8 @@
     <Image Include="res\next.png" />
     <Image Include="res\off.png" />
     <Image Include="res\on.png" />
+    <Image Include="res\r.png" />
+    <Image Include="res\smoke.png" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Timer.h" />

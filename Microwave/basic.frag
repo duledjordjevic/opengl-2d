@@ -8,5 +8,6 @@ uniform float uAlpha;
 
 void main() 
 {
+
 	outCol = vec4(chCol.rgb, chCol.a + uAlpha);
 }

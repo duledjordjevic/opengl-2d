@@ -139,6 +139,30 @@
     <Image Include="res\name.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\e.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\r.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\smoke.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\fog.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\cloud-smoke-black.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\cloud-smoke-gray.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\cloud-smoke.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\cloud-smoke-transparent.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Timer.h">

@@ -4,6 +4,8 @@
 #include <sstream>
 #include <GL/glew.h>  
 #include <GLFW/glfw3.h>
+#include <glm/vec3.hpp> 
+#include <glm/gtc/type_ptr.hpp>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #include <chrono>
@@ -35,6 +37,8 @@ Button numpadButtons[10];
 Button funcButtons[3];
 Timer timer;
 bool isMicrowaveOpen = false;
+bool isMicrowaveWorking = true;
+bool fixingInProgress = false;
 int main(void)
 {
     if (!glfwInit())
@@ -117,6 +121,12 @@ int main(void)
          0.8,  0.5,      0.0, 0.0, 0.0, 1.0,
          0.5,  0.7,      0.0, 0.0, 0.0, 1.0,
          0.8,  0.7,      0.0, 0.0, 0.0, 1.0,
+
+         // dimmming 
+         -1.0, -1.0 , 0.0, 0.0, 0.0, 0.0,
+         1.0, -1.0 , 0.0, 0.0, 0.0, 0.0,
+         -1.0, 1.0 , 0.0, 0.0, 0.0, 0.0,
+         1.0, 1.0 , 0.0, 0.0, 0.0, 0.0,
     };
     unsigned int stride = (2 + 4) * sizeof(float);
 
@@ -149,29 +159,29 @@ int main(void)
 
         //timer
         0.5,  0.5,      0.0f, 0.0f,
-        0.57,  0.5,      1.0f, 0.0f,
+        0.56,  0.5,      1.0f, 0.0f,
         0.5,  0.7,      0.0f, 1.0f,
-        0.57,  0.7,      1.0f, 1.0f,
+        0.56,  0.7,      1.0f, 1.0f,
 
-        0.57,  0.5,      0.0f, 0.0f,
-        0.64,  0.5,      1.0f, 0.0f,
-        0.57,  0.7,      0.0f, 1.0f,
-        0.64,  0.7,      1.0f, 1.0f,
+        0.56,  0.5,      0.0f, 0.0f,
+        0.62,  0.5,      1.0f, 0.0f,
+        0.56,  0.7,      0.0f, 1.0f,
+        0.62,  0.7,      1.0f, 1.0f,
 
-        0.66,  0.5,      0.0f, 0.0f,
-        0.73,  0.5,      1.0f, 0.0f,
-        0.66,  0.7,      0.0f, 1.0f,
-        0.73,  0.7,      1.0f, 1.0f,
+        0.68,  0.5,      0.0f, 0.0f,
+        0.74,  0.5,      1.0f, 0.0f,
+        0.68,  0.7,      0.0f, 1.0f,
+        0.74,  0.7,      1.0f, 1.0f,
 
-        0.73,  0.5,      0.0f, 0.0f,
+        0.74,  0.5,      0.0f, 0.0f,
         0.80,  0.5,      1.0f, 0.0f,
-        0.73,  0.7,      0.0f, 1.0f,
+        0.74,  0.7,      0.0f, 1.0f,
         0.80,  0.7,      1.0f, 1.0f,
 
-        0.64,  0.5,      0.0f, 0.0f,
-        0.66,  0.5,      1.0f, 0.0f,
-        0.64,  0.7,      0.0f, 1.0f,
-        0.66,  0.7,      1.0f, 1.0f,
+        0.62,  0.5,      0.0f, 0.0f,
+        0.68,  0.5,      1.0f, 0.0f,
+        0.62,  0.7,      0.0f, 1.0f,
+        0.68,  0.7,      1.0f, 1.0f,
 
         //numpad
         0.49,  0.2,      0.0f, 0.0f,
@@ -266,6 +276,17 @@ int main(void)
         0.455, -0.86,      0.0, 1.0,
         0.95, -0.86,       1.0, 1.0,
 
+        // smoke
+            -0.05, -1, 0.0, 0.0,
+            0.5, -1, 1.0, 0.0,
+            -0.5, -0.95, 0.0, 1.0,
+            0.5, -0.95, 1.0, 1.0,
+
+            //0.455, -0.96, 0.0, 0.0,
+            //0.95, -0.96, 1.0, 0.0,
+            //0.455, -0.86, 0.0, 1.0,
+            //0.95, -0.86, 1.0, 1.0,
+
     };
     unsigned int stride2 = (2 + 2) * sizeof(float);
 
@@ -295,6 +316,13 @@ int main(void)
     unsigned openMicrowaveTexture = createTexture("res/microwave-opened.png");
     unsigned lightTexture = createTexture("res/light3.png");
     unsigned nameTexture = createTexture("res/name.png");
+    unsigned charRTexture = createTexture("res/r.png");
+    unsigned charETexture = createTexture("res/e.png");
+    unsigned charOTexture = createTexture("res/o.png");
+    unsigned smokeTexture = createTexture("res/cloud-smoke.png");
+    unsigned smokeGrayTexture = createTexture("res/cloud-smoke-gray.png");
+    unsigned smokeBlackTexture = createTexture("res/cloud-smoke-black.png");
+    unsigned smokeTransparentTexture = createTexture("res/cloud-smoke-transparent.png");
 
     unsigned numbersTextures[10];
     loadTextures(numbersTextures, "", "");
@@ -311,6 +339,8 @@ int main(void)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     float alphaLoc = glGetUniformLocation(basicShader, "uAlpha");
+    float scaleLoc = glGetUniformLocation(textureShader, "uScale");
+    float scale = 0.0f;
 
     double lastFrameTime = 0.0;
     const double targetFrameRate = 1.0 / 60.0;
@@ -323,6 +353,7 @@ int main(void)
     auto lastUpdateTime = std::chrono::steady_clock::now();
     bool isWindowTransparent = true;
     bool wasTransparentKeyPressed = false;
+    float dimmingLight = 0.01;
     
     while (!glfwWindowShouldClose(window))
     {
@@ -334,8 +365,6 @@ int main(void)
             {
                 glfwSetWindowShouldClose(window, GL_TRUE);
             }
-
-           
 
             auto currentRealTime = std::chrono::steady_clock::now();
             std::chrono::duration<float> elapsed = currentRealTime - lastUpdateTime;
@@ -354,8 +383,6 @@ int main(void)
             }
 
             glClear(GL_COLOR_BUFFER_BIT);
-
-    
 
             glUseProgram(basicShader);
             if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
@@ -399,15 +426,31 @@ int main(void)
             glActiveTexture(GL_TEXTURE0);
          
 
-            for (int i = 0; i < 4; i++) {
-                if (timer.counter == i) {
-                    if (!showTexture && !timer.running && !timer.paused) continue;
+            if (isMicrowaveWorking) {
+                for (int i = 0; i < 4; i++) {
+                    if (timer.counter == i) {
+                        if (!showTexture && !timer.running && !timer.paused) continue;
+                    }
+                    glBindTexture(GL_TEXTURE_2D, numbersTextures[timer.time[i]]);
+                    glDrawArrays(GL_TRIANGLE_STRIP, 4 * (i + 1), 4);
                 }
-                glBindTexture(GL_TEXTURE_2D, numbersTextures[timer.time[i]]);
-                glDrawArrays(GL_TRIANGLE_STRIP, 4 * (i+1), 4);
+                glBindTexture(GL_TEXTURE_2D, colon);
+                glDrawArrays(GL_TRIANGLE_STRIP, 20, 4);
             }
-            glBindTexture(GL_TEXTURE_2D, colon);
-            glDrawArrays(GL_TRIANGLE_STRIP, 20, 4);
+            else {
+                if (showTexture) {
+                    glBindTexture(GL_TEXTURE_2D, charETexture);
+                    glDrawArrays(GL_TRIANGLE_STRIP, 4, 4);
+                    glBindTexture(GL_TEXTURE_2D, charRTexture);
+                    glDrawArrays(GL_TRIANGLE_STRIP, 8, 4);
+                    glDrawArrays(GL_TRIANGLE_STRIP, 20, 4);
+                    glBindTexture(GL_TEXTURE_2D, charOTexture);
+                    glDrawArrays(GL_TRIANGLE_STRIP, 12, 4);
+                    glBindTexture(GL_TEXTURE_2D, charRTexture);
+                    glDrawArrays(GL_TRIANGLE_STRIP, 16, 4);
+                }
+            }
+            
 
 
             glBindTexture(GL_TEXTURE_2D, numpadTextures[1]);
@@ -454,8 +497,6 @@ int main(void)
                 glBindTexture(GL_TEXTURE_2D, openMicrowaveTexture);
                 glDrawArrays(GL_TRIANGLE_STRIP, 80, 4);
             }
-
-
            
             glBindTexture(GL_TEXTURE_2D, foodTexture);
             glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -472,6 +513,69 @@ int main(void)
             glBindVertexArray(VAO);
             if (!isMicrowaveOpen) {
                 glDrawArrays(GL_TRIANGLE_STRIP, 20, 4);
+            }
+
+            if (timer.running && glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
+            {
+                isMicrowaveWorking = false;
+                stopTimer(timer);
+            }
+
+            if (!isMicrowaveWorking && !fixingInProgress) {
+                glUniform1f(alphaLoc, dimmingLight);
+                glDrawArrays(GL_TRIANGLE_STRIP, 32, 4);
+
+                if (dimmingLight < 0.8) {
+                    dimmingLight += 0.01;
+                }
+
+                if (scale >= 0.0 && scale < 2.1) {
+                    scale += 0.01;
+                }
+                else {
+                    scale = -1.0;
+                }
+                glUniform1f(alphaLoc, 0);
+            }
+
+            if (!isMicrowaveWorking && glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) {
+                fixingInProgress = true;
+            }
+
+
+            if (!isMicrowaveWorking && !fixingInProgress && scale != -1.0) {
+                glUseProgram(textureShader);
+                glBindVertexArray(VAO2);
+
+                glUniform1f(scaleLoc, scale);
+                if(scale < 0.5)
+                    glBindTexture(GL_TEXTURE_2D, smokeBlackTexture);
+                else if (scale > 0.5 && scale < 1.2)
+                    glBindTexture(GL_TEXTURE_2D, smokeGrayTexture);
+                else if(scale > 1.2 && scale < 1.6)
+                    glBindTexture(GL_TEXTURE_2D, smokeTexture);
+                else if (scale > 1.6 )
+                    glBindTexture(GL_TEXTURE_2D, smokeTransparentTexture);
+
+                glDrawArrays(GL_TRIANGLE_STRIP, 92, 4);
+                glUniform1f(scaleLoc, 0.0);
+            }
+
+            glUseProgram(basicShader);
+            glBindVertexArray(VAO);
+
+            if (!isMicrowaveWorking && fixingInProgress) {
+                glUniform1f(alphaLoc, dimmingLight);
+                glDrawArrays(GL_TRIANGLE_STRIP, 32, 4);
+
+                if (dimmingLight < 0.0) {
+                    isMicrowaveWorking = true;
+                    fixingInProgress = false;
+                    scale = 0.0f;
+                }
+                dimmingLight -= 0.01;
+
+                glUniform1f(alphaLoc, 0);
             }
 
 
@@ -494,19 +598,23 @@ int main(void)
 }
 
 void startTimer(Timer& timer) {
-    if (!timer.running) {
-        if (!(timer.time[0] == 0 && timer.time[1] == 0 && timer.time[2] == 0 && timer.time[3] == 0) && !isMicrowaveOpen) {
-            timer.running = true;
+    if (isMicrowaveWorking) {
+        if (!timer.running) {
+            if (!(timer.time[0] == 0 && timer.time[1] == 0 && timer.time[2] == 0 && timer.time[3] == 0) && !isMicrowaveOpen) {
+                timer.running = true;
+            }
         }
-    }
-    if (!isMicrowaveOpen) {
-        timer.paused = false;
-        timer.counter = 0;
+        if (!isMicrowaveOpen) {
+            timer.paused = false;
+            timer.counter = 0;
+        }
     }
 }
 void pauseTimer(Timer& timer) {
-    if (timer.running) {
-        timer.paused = true;
+    if (isMicrowaveWorking) {
+        if (timer.running) {
+            timer.paused = true;
+        }
     }
 }
 void stopTimer(Timer& timer) {
@@ -571,34 +679,36 @@ void initializeButtons() {
     funcButtons[2] = { 0.73, 0.84, -0.38, -0.24, 2 };
 }
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
-    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-        double xpos, ypos;
-        glfwGetCursorPos(window, &xpos, &ypos);
+    if (isMicrowaveWorking) {
+        if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+            double xpos, ypos;
+            glfwGetCursorPos(window, &xpos, &ypos);
 
-        int width, height;
-        glfwGetWindowSize(window, &width, &height);
+            int width, height;
+            glfwGetWindowSize(window, &width, &height);
 
-        float xNormalized = (xpos / width) * 2.0f - 1.0f;
-        float yNormalized = 1.0f - (ypos / height) * 2.0f; 
+            float xNormalized = (xpos / width) * 2.0f - 1.0f;
+            float yNormalized = 1.0f - (ypos / height) * 2.0f; 
 
 
-        for (const Button& button : numpadButtons) {
-            if (xNormalized >= button.xMin && xNormalized <= button.xMax &&
-                yNormalized >= button.yMin && yNormalized <= button.yMax) {
-                std::cout << "Kliknut numpad taster: " << button.id << std::endl;
-                handleNumpadButtonClick(button.id);
-                break;
+            for (const Button& button : numpadButtons) {
+                if (xNormalized >= button.xMin && xNormalized <= button.xMax &&
+                    yNormalized >= button.yMin && yNormalized <= button.yMax) {
+                    std::cout << "Kliknut numpad taster: " << button.id << std::endl;
+                    handleNumpadButtonClick(button.id);
+                    break;
+                }
             }
-        }
-        for (const Button& button : funcButtons) {
-            if (xNormalized >= button.xMin && xNormalized <= button.xMax &&
-                yNormalized >= button.yMin && yNormalized <= button.yMax) {
-                std::cout << "Kliknut func taster: " << button.id << std::endl;
-                handleFuncButtonClick(button.id);
-                break;
+            for (const Button& button : funcButtons) {
+                if (xNormalized >= button.xMin && xNormalized <= button.xMax &&
+                    yNormalized >= button.yMin && yNormalized <= button.yMax) {
+                    std::cout << "Kliknut func taster: " << button.id << std::endl;
+                    handleFuncButtonClick(button.id);
+                    break;
+                }
             }
-        }
        
+        }
     }
 }
 void cursorCallback(GLFWwindow* window, double xpos, double ypos) {
